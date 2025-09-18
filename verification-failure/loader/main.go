@@ -16,7 +16,6 @@ func main() {
 	}
 	defer objs.Close()
 
-
 	tp, err := link.Tracepoint("syscalls", "sys_enter_execve", objs.VerifierFail, nil)
 	if err != nil {
 		log.Fatalf("[VERIFIER ERROR] Failed to attach eBPF program: %v", err)

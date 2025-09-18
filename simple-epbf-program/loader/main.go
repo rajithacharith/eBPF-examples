@@ -16,7 +16,6 @@ import (
 	"github.com/cilium/ebpf/link"
 )
 
-
 func main() {
 	// Load compiled eBPF objects (bpf2go bindings)
 	objs := traceexecObjects{}

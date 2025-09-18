@@ -38,9 +38,9 @@ func main() {
 		case <-ticker.C:
 			var count uint64
 			err := objs.ExecveCount.Lookup(&key, &count)
-			   if err != nil && !os.IsNotExist(err) {
-				   log.Printf("map lookup failed: %v", err)
-			   }
+			if err != nil && !os.IsNotExist(err) {
+				log.Printf("map lookup failed: %v", err)
+			}
 			fmt.Printf("execve count: %d\n", count)
 		case <-sig:
 			fmt.Println("Exiting.")
