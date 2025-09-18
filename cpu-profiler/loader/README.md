@@ -28,23 +28,21 @@ PID: 1234 COMM: bash CPU Time (ns): 5000000
 
 ## Build & Run
 
-### 1. Build the eBPF object and Go loader
+
+### 1. Build the Docker image
 
 ```sh
-cd loader
-# Install bpf2go if not already installed
-GO111MODULE=on go install github.com/cilium/ebpf/cmd/bpf2go@latest
-# Generate Go bindings for the eBPF program
-bpf2go -cc clang -cflags "-O2 -g -Wall" -type trace_event_raw_sched_switch CpuProfiler ../epbf/cpu_profiler.c -- -I/usr/include
-# Tidy and build
-go mod tidy
-go build -o cpu-profiler .
+docker build -t cpu-profiler-example .
 ```
 
-### 2. Run the loader (requires root)
+### 2. Run the profiler in Docker (requires privileges)
 
 ```sh
-sudo ./cpu-profiler
+docker run --rm -it --privileged --name cpu-profiler-example --network host \
+	--cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --cap-add=SYS_PTRACE \
+	-v /sys/kernel/debug:/sys/kernel/debug:rw \
+	-v /sys/fs/bpf:/sys/fs/bpf:rw \
+	cpu-profiler-example
 ```
 
 You will see live CPU usage deltas every 2 seconds. Press Ctrl+C to exit.
